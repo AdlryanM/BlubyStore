@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bluby Store — Top Up Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-50:#FFF4F8;
+    --pink-100:#FFE6F0;
+    --pink-200:#FFD0E3;
+    --pink-300:#FFA9CC;
+    --pink-400:#FF7EB3;
+    --pink-500:#FF5C9E;
+    --pink-600:#EC3E86;
+    --plum:#5B2F47;
+    --plum-soft:#8A6277;
+    --plum-mute:#B492A3;
+    --lav:#C9A7F5;
+    --mint:#7FD9C0;
+    --lemon:#FFD86E;
+    --white:#FFFFFF;
+    --line:#FBDCE9;
+    --line-2:#F5C8DC;
+    --green:#34B98A;
+    --red:#F0658B;
+    --shadow-sm:0 4px 14px rgba(236,62,134,.08);
+    --shadow-md:0 10px 30px rgba(236,62,134,.13);
+    --shadow-lg:0 20px 48px rgba(236,62,134,.18);
+    --r-sm:14px;
+    --r:20px;
+    --r-lg:28px;
+    --fd:'Baloo 2', cursive;
+    --fb:'Plus Jakarta Sans', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1000px 600px at 85% -10%, #FFE9F3 0%, transparent 60%),
+      radial-gradient(800px 500px at 0% 5%, #F4EBFF 0%, transparent 55%),
+      var(--pink-50);
+    background-attachment:fixed;
+    color:var(--plum);
+    font-family:var(--fb);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:var(--fd);margin:0;line-height:1.2;font-weight:700;}
+  p{margin:0;}
+  ul{margin:0;padding:0;list-style:none;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  input,select{font-family:inherit;}
+  img,svg{display:block;}
+  :focus-visible{outline:2.5px solid var(--pink-500);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}
+  }
+  .container{max-width:1100px;margin:0 auto;padding:0 22px;}
+  .icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  [hidden]{display:none !important;}
+
+  /* ---------- Header ---------- */
+  .site-header{position:sticky;top:0;z-index:40;background:rgba(255,244,248,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+  .header-row{display:flex;align-items:center;justify-content:space-between;height:70px;gap:14px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(140deg,var(--pink-400),var(--pink-600));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);flex:0 0 auto;}
+  .brand-mark svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2;}
+  .brand-name{font-family:var(--fd);font-weight:800;font-size:21px;letter-spacing:.2px;}
+  .nav{display:flex;align-items:center;gap:6px;}
+  .nav a{font-size:14.5px;font-weight:600;color:var(--plum-soft);padding:9px 15px;border-radius:999px;transition:.15s;}
+  .nav a:hover{background:var(--pink-100);color:var(--pink-600);}
+  .nav a.active{background:var(--pink-500);color:#fff;box-shadow:var(--shadow-sm);}
+  .header-actions{display:flex;align-items:center;gap:10px;}
+  .role-toggle{display:flex;background:var(--pink-100);border-radius:999px;padding:4px;gap:2px;}
+  .role-btn{border:0;background:transparent;color:var(--plum-soft);font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:999px;transition:.15s;}
+  .role-btn.active{background:#fff;color:var(--pink-600);box-shadow:var(--shadow-sm);}
+  .menu-btn{display:none;background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:9px;color:var(--pink-600);}
+  .mobile-nav{display:none;flex-direction:column;padding:8px 22px 16px;background:rgba(255,244,248,.97);border-top:1px solid var(--line);}
+  .mobile-nav.open{display:flex;}
+  .mobile-nav a{padding:12px 0;font-weight:600;color:var(--plum-soft);border-bottom:1px solid var(--line);}
+  @media (max-width:820px){.nav{display:none;}.menu-btn{display:inline-flex;}}
+
+  /* ---------- Page intro ---------- */
+  .page-top{padding:34px 0 8px;}
+  .page-title{font-size:30px;}
+  .page-title .accent{color:var(--pink-600);}
+  .page-sub{color:var(--plum-soft);font-size:14.5px;margin-top:4px;}
+  .search-wrap{position:relative;max-width:100%;width:300px;}
+  .search-wrap input{width:100%;background:#fff;border:1.5px solid var(--line-2);border-radius:999px;padding:12px 16px 12px 42px;color:var(--plum);font-size:14px;box-shadow:var(--shadow-sm);}
+  .search-wrap input::placeholder{color:var(--plum-mute);}
+  .search-wrap .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--pink-400);}
+  .top-row{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:22px;}
+
+  /* ---------- Game grid ---------- */
+  .game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:16px;padding-bottom:50px;}
+  .game-card{background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:11px;cursor:pointer;transition:transform .18s cubic-bezier(.34,1.4,.64,1), box-shadow .18s, border-color .18s;box-shadow:var(--shadow-sm);}
+  .game-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--pink-200);}
+  .game-thumb{width:78px;height:78px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:23px;color:#fff;letter-spacing:.5px;box-shadow:0 8px 20px rgba(91,47,71,.16);}
+  .game-card .gname{font-family:var(--fd);font-weight:700;font-size:15.5px;line-height:1.25;}
+  .game-card .gmeta{font-size:11.5px;color:var(--plum-mute);font-weight:600;}
+  .heart{color:var(--pink-300);}
+
+  /* ---------- Detail page ---------- */
+  .back-btn{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--line-2);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:700;color:var(--plum-soft);margin-bottom:18px;box-shadow:var(--shadow-sm);}
+  .back-btn:hover{color:var(--pink-600);border-color:var(--pink-300);}
+  .detail-hero{display:flex;align-items:center;gap:18px;background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--shadow-sm);margin-bottom:22px;}
+  .detail-hero .game-thumb{width:70px;height:70px;font-size:21px;border-radius:22px;}
+  .detail-hero h2{font-size:24px;}
+  .detail-hero .dh-sub{font-size:13.5px;color:var(--plum-soft);margin-top:2px;}
+  .detail-layout{display:grid;grid-template-columns:1fr 344px;gap:22px;align-items:start;padding-bottom:60px;}
+  @media (max-width:900px){.detail-layout{grid-template-columns:1fr;}}
+
+  .panel{background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm);margin-bottom:18px;}
+  .panel-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .step-chip{width:27px;height:27px;border-radius:50%;background:var(--pink-500);color:#fff;font-family:var(--fd);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .panel-head h3{font-size:17.5px;}
+
+  .nominal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px;}
+  .nominal{position:relative;background:var(--pink-50);border:2px solid transparent;border-radius:var(--r);padding:14px 13px;text-align:left;transition:.15s;}
+  .nominal:hover{border-color:var(--pink-200);background:#fff;}
+  .nominal.on{border-color:var(--pink-500);background:#fff;box-shadow:0 0 0 4px rgba(255,92,158,.13);}
+  .nominal .nm{font-family:var(--fd);font-size:16px;font-weight:700;}
+  .nominal .bn{font-size:11px;color:var(--green);font-weight:700;margin-top:1px;}
+  .nominal .pr{font-size:14px;font-weight:700;color:var(--pink-600);margin-top:6px;}
+  .hot{position:absolute;top:-8px;right:9px;background:var(--lemon);color:#7A5400;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;box-shadow:var(--shadow-sm);}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:700;color:var(--plum-soft);margin-bottom:6px;}
+  .field input,.field select{width:100%;background:var(--pink-50);border:1.5px solid var(--line-2);border-radius:var(--r-sm);padding:12px 14px;color:var(--plum);font-size:14.5px;transition:.15s;}
+  .field input::placeholder{color:var(--plum-mute);}
+  .field input:focus,.field select:focus{background:#fff;border-color:var(--pink-400);}
+  .field .err-msg{color:var(--red);font-size:11.5px;font-weight:600;margin-top:5px;display:none;}
+  .field.bad input,.field.bad select{border-color:var(--red);background:#FFF2F6;}
+  .field.bad .err-msg{display:block;}
+  .field-row{display:flex;gap:12px;}
+  .field-row .field{flex:1;}
+  .hint{font-size:12px;color:var(--plum-mute);margin-top:-4px;margin-bottom:12px;}
+
+  .pay-list{display:flex;flex-direction:column;gap:9px;}
+  .pay{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--pink-50);border:2px solid transparent;border-radius:var(--r);padding:13px 15px;cursor:pointer;transition:.15s;}
+  .pay:hover{border-color:var(--pink-200);background:#fff;}
+  .pay.on{border-color:var(--pink-500);background:#fff;box-shadow:0 0 0 4px rgba(255,92,158,.12);}
+  .pay .pi{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto;}
+  .pay .pi .icon{width:17px;height:17px;}
+  .pay .pn{font-size:14.5px;font-weight:700;}
+  .pay .pd{font-size:11.5px;color:var(--plum-mute);}
+  .pay .pf{font-size:12.5px;font-weight:700;color:var(--plum-soft);white-space:nowrap;}
+
+  /* ---------- Summary ---------- */
+  .summary{position:sticky;top:90px;background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-md);}
+  .summary h3{font-size:18px;margin-bottom:16px;}
+  .sum-row{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--plum-soft);padding:7px 0;}
+  .sum-row .v{font-weight:700;color:var(--plum);text-align:right;}
+  .sum-div{height:1px;background:var(--line);margin:10px 0;}
+  .sum-total{display:flex;justify-content:space-between;align-items:center;background:var(--pink-50);border-radius:var(--r);padding:14px 16px;margin:12px 0 16px;}
+  .sum-total span{font-size:13.5px;font-weight:700;color:var(--plum-soft);}
+  .sum-total b{font-family:var(--fd);font-size:23px;color:var(--pink-600);}
+  .empty-hint{font-size:13px;color:var(--plum-mute);text-align:center;padding:14px 0 4px;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:15px;padding:14px 24px;border:0;border-radius:999px;font-family:var(--fb);transition:transform .14s, box-shadow .14s, background .15s;}
+  .btn:active{transform:translateY(1px) scale(.99);}
+  .btn-primary{background:linear-gradient(135deg,var(--pink-400),var(--pink-600));color:#fff;box-shadow:0 8px 20px rgba(236,62,134,.32);}
+  .btn-primary:hover{box-shadow:0 12px 26px rgba(236,62,134,.4);}
+  .btn-ghost{background:#fff;border:1.5px solid var(--line-2);color:var(--plum-soft);}
+  .btn-ghost:hover{border-color:var(--pink-300);color:var(--pink-600);}
+  .btn-block{width:100%;}
+  .btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none;}
+  .btn-sm{padding:10px 16px;font-size:13.5px;}
+
+  /* ---------- Lacak ---------- */
+  .narrow{max-width:560px;margin:0 auto;padding-bottom:60px;}
+  .lacak-form{display:flex;gap:10px;margin-bottom:24px;}
+  .lacak-form input{flex:1;background:#fff;border:1.5px solid var(--line-2);border-radius:999px;padding:13px 18px;color:var(--plum);font-size:14.5px;box-shadow:var(--shadow-sm);}
+  .order-card{background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm);}
+  .oc-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .oc-code{font-family:var(--fd);font-size:19px;color:var(--pink-600);}
+  .pill{font-size:11.5px;font-weight:800;padding:6px 13px;border-radius:999px;}
+  .pill.wait{background:#F3EAF0;color:var(--plum-soft);}
+  .pill.proc{background:#EDE4FD;color:#7A4FC0;}
+  .pill.done{background:#DDF5EC;color:var(--green);}
+  .pill.fail{background:#FFE3EB;color:var(--red);}
+  .tl{margin-top:20px;}
+  .tl-step{display:flex;gap:14px;padding-bottom:22px;position:relative;}
+  .tl-step::before{content:"";position:absolute;left:10px;top:24px;bottom:0;width:2px;background:var(--line-2);}
+  .tl-step:last-child{padding-bottom:0;}
+  .tl-step:last-child::before{display:none;}
+  .tl-dot{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--line-2);flex:0 0 auto;display:flex;align-items:center;justify-content:center;}
+  .tl-dot .icon{width:11px;height:11px;stroke-width:3.4;color:#fff;opacity:0;}
+  .tl-step.done .tl-dot{background:var(--green);border-color:var(--green);}
+  .tl-step.done .tl-dot .icon{opacity:1;}
+  .tl-step.now .tl-dot{border-color:var(--pink-500);box-shadow:0 0 0 5px rgba(255,92,158,.16);}
+  .tl-label{font-size:14.5px;font-weight:700;}
+  .tl-time{font-size:12px;color:var(--plum-mute);margin-top:1px;}
+  .blank{background:#fff;border:1.5px dashed var(--line-2);border-radius:var(--r-lg);padding:38px 22px;text-align:center;color:var(--plum-mute);font-size:13.5px;}
+
+  /* ---------- Modal ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(91,47,71,.4);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;}
+  .overlay[hidden]{display:none;}
+  .modal{width:420px;max-width:100%;max-height:88vh;overflow-y:auto;background:#fff;border-radius:var(--r-lg);padding:30px 26px 26px;position:relative;box-shadow:var(--shadow-lg);text-align:center;}
+  .modal-x{position:absolute;top:14px;right:14px;background:var(--pink-50);border:0;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--plum-soft);}
+  .modal-x:hover{background:var(--pink-100);color:var(--pink-600);}
+  .ok-circle{width:64px;height:64px;border-radius:50%;background:linear-gradient(140deg,#FFE0EE,#FFD0E3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+  .ok-circle .icon{width:29px;height:29px;stroke-width:2.6;color:var(--pink-600);}
+  .ok-code{font-family:var(--fd);font-size:25px;color:var(--pink-600);letter-spacing:.6px;margin:6px 0 2px;}
+  .copy-chip{display:inline-flex;align-items:center;gap:7px;background:var(--pink-50);border:1.5px solid var(--line-2);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--plum-soft);cursor:pointer;margin-top:6px;}
+  .copy-chip:hover{border-color:var(--pink-300);color:var(--pink-600);}
+  .ok-status{display:flex;align-items:center;justify-content:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--plum-soft);margin:20px 0 6px;}
+  .spin{width:15px;height:15px;border:2.5px solid var(--line-2);border-top-color:var(--pink-500);border-radius:50%;animation:sp .8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .ok-meta{font-size:13px;color:var(--plum-mute);margin-bottom:20px;}
+
+  /* ---------- Admin ---------- */
+  .adm{padding:30px 0 70px;}
+  .adm-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px;}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:34px;}
+  .stat{background:#fff;border:1.5px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow-sm);}
+  .stat .sl{font-size:12px;color:var(--plum-mute);font-weight:600;margin-bottom:6px;}
+  .stat .sv{font-family:var(--fd);font-size:24px;font-weight:700;color:var(--pink-600);}
+  @media (max-width:820px){.stat-grid{grid-template-columns:1fr 1fr;}}
+  .adm-sec{margin-bottom:34px;}
+  .adm-sec h3{font-size:18px;margin-bottom:13px;}
+  .tbl-wrap{background:#fff;border:1.5px solid var(--line);border-radius:var(--r);overflow-x:auto;box-shadow:var(--shadow-sm);}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:660px;}
+  th{text-align:left;font-size:11.5px;color:var(--plum-mute);font-weight:700;padding:12px 15px;background:var(--pink-50);border-bottom:1.5px solid var(--line);}
+  td{padding:12px 15px;border-bottom:1px solid var(--line);color:var(--plum-soft);vertical-align:middle;}
+  tr:last-child td{border-bottom:0;}
+  td.bold{color:var(--plum);font-weight:700;}
+  .sel-status{background:var(--pink-50);border:1.5px solid var(--line-2);border-radius:10px;color:var(--plum);padding:7px 9px;font-size:12.5px;}
+  .price-in{width:112px;background:var(--pink-50);border:1.5px solid var(--line-2);border-radius:10px;color:var(--plum);padding:7px 10px;font-size:12.5px;}
+  .sw{position:relative;display:inline-block;width:42px;height:23px;}
+  .sw input{opacity:0;width:0;height:0;}
+  .sl-track{position:absolute;inset:0;background:#EEDCE6;border-radius:999px;cursor:pointer;transition:.18s;}
+  .sl-track::before{content:"";position:absolute;width:17px;height:17px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 2px 5px rgba(91,47,71,.2);}
+  .sw input:checked + .sl-track{background:var(--pink-500);}
+  .sw input:checked + .sl-track::before{transform:translateX(19px);}
+  .bar-row{display:grid;grid-template-columns:170px 1fr 46px;align-items:center;gap:12px;margin-bottom:11px;font-size:13px;}
+  .bar-tr{height:10px;background:var(--pink-100);border-radius:999px;overflow:hidden;}
+  .bar-fl{height:100%;background:linear-gradient(90deg,var(--pink-400),var(--pink-600));border-radius:999px;}
+  .reset-a{font-size:12.5px;font-weight:700;color:var(--plum-mute);border-bottom:1.5px dashed var(--plum-mute);}
+  .reset-a:hover{color:var(--red);border-color:var(--red);}
+
+  .loading{padding:70px 20px;text-align:center;color:var(--plum-mute);font-size:14px;}
+  .toasts{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:9px;z-index:200;}
+  .toast{background:#fff;border:1.5px solid var(--line-2);border-left:5px solid var(--pink-500);border-radius:var(--r-sm);padding:12px 17px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow-md);max-width:290px;}
+  .toast.ok{border-left-color:var(--green);}
+  .toast.bad{border-left-color:var(--red);}
+
+  .site-footer{border-top:1px solid var(--line);padding:26px 0;}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--plum-mute);}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-row">
+    <a href="#" class="brand" onclick="go('home');return false;">
+      <span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.5 12 20 12 20z"/></svg></span>
+      <span class="brand-name">Bluby Store</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="#" data-v="home" onclick="go('home');return false;">Pilih Game</a>
+      <a href="#" data-v="lacak" onclick="go('lacak');return false;">Lacak Pesanan</a>
+    </nav>
+    <div class="header-actions">
+      <div class="role-toggle">
+        <button class="role-btn active" id="rbCust" onclick="setRole('cust')">Pelanggan</button>
+        <button class="role-btn" id="rbAdm" onclick="setRole('adm')">Admin</button>
+      </div>
+      <button class="menu-btn" aria-label="Menu" onclick="toggleNav()"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mnav">
+    <a href="#" onclick="go('home');toggleNav();return false;">Pilih Game</a>
+    <a href="#" onclick="go('lacak');toggleNav();return false;">Lacak Pesanan</a>
+  </div>
+</header>
+
+<!-- ========== HOME: pilih game ========== -->
+<main id="vHome">
+  <div class="container page-top">
+    <div class="top-row">
+      <div>
+        <h1 class="page-title">Mau top up <span class="accent">game apa</span>?</h1>
+        <p class="page-sub">Pilih gamenya, isi ID, bayar. Selesai.</p>
+      </div>
+      <div class="search-wrap">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="gameSearch" placeholder="Cari game...">
+      </div>
+    </div>
+    <div class="game-grid" id="gameGrid"></div>
+  </div>
+</main>
+
+<!-- ========== DETAIL: satu game ========== -->
+<main id="vGame" hidden>
+  <div class="container page-top">
+    <button class="back-btn" onclick="go('home')"><svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Semua game</button>
+    <div id="gameDetail"></div>
+  </div>
+</main>
+
+<!-- ========== LACAK ========== -->
+<main id="vLacak" hidden>
+  <div class="container page-top">
+    <div class="narrow">
+      <h1 class="page-title" style="margin-bottom:4px;">Lacak <span class="accent">pesanan</span></h1>
+      <p class="page-sub" style="margin-bottom:20px;">Masukkan kode pesanan kamu.</p>
+      <div class="lacak-form">
+        <input type="text" id="codeIn" placeholder="BLB-260916-A1B2">
+        <button class="btn btn-primary" onclick="findOrder()">Cek</button>
+      </div>
+      <div id="lacakOut"></div>
+    </div>
+  </div>
+</main>
+
+<!-- ========== ADMIN ========== -->
+<main id="vAdm" hidden>
+  <div class="container adm">
+    <div class="adm-head">
+      <div>
+        <h1 class="page-title">Dashboard <span class="accent">admin</span></h1>
+        <p class="page-sub">Mode demo, data tersimpan di penyimpanan halaman ini.</p>
+      </div>
+      <a href="#" class="reset-a" onclick="resetDemo();return false;">Reset data demo</a>
+    </div>
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="adm-sec">
+      <h3>Pesanan masuk</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Kode</th><th>Produk</th><th>Tujuan</th><th>Bayar</th><th>Total</th><th>Status</th><th>Waktu</th></tr></thead>
+        <tbody id="ordBody"></tbody>
+      </table></div>
+    </div>
+    <div class="adm-sec">
+      <h3>Produk terlaris</h3>
+      <div id="topProd"></div>
+    </div>
+    <div class="adm-sec">
+      <h3>Kelola produk</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Produk</th><th>Game</th><th>Harga</th><th>Tampil</th></tr></thead>
+        <tbody id="prodBody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container foot">
+    <span>Bluby Store &middot; Top up game 24 jam</span>
+    <span>cs@blubystore.id</span>
+  </div>
+</footer>
+
+<div class="overlay" id="okOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-x" onclick="closeOk()" aria-label="Tutup"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div id="okBody"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+
+/* ================= DATA ================= */
+var GAMES = {
+  ml:{name:'Mobile Legends', short:'ML', unit:'Diamond', g1:'#FF7EB3', g2:'#EC3E86', fields:[
+    {k:'userId', l:'User ID', ph:'123456789'},
+    {k:'zoneId', l:'Zone ID', ph:'8215'}
+  ]},
+  ff:{name:'Free Fire', short:'FF', unit:'Diamond', g1:'#FFA07A', g2:'#F0658B', fields:[
+    {k:'userId', l:'Player ID', ph:'1023456789'}
+  ]},
+  pubgm:{name:'PUBG Mobile', short:'PUBG', unit:'UC', g1:'#FFD86E', g2:'#FF9F6E', fields:[
+    {k:'userId', l:'Character ID', ph:'5123456789'}
+  ]},
+  genshin:{name:'Genshin Impact', short:'GI', unit:'Crystal', g1:'#9ED9F5', g2:'#C9A7F5', fields:[
+    {k:'userId', l:'UID', ph:'812345678'},
+    {k:'server', l:'Server', opt:['Asia','America','Europe','TW, HK, MO']}
+  ]},
+  hsr:{name:'Honkai Star Rail', short:'HSR', unit:'Shard', g1:'#C9A7F5', g2:'#8E7BE8', fields:[
+    {k:'userId', l:'UID', ph:'700123456'},
+    {k:'server', l:'Server', opt:['Asia','America','Europe','TW, HK, MO']}
+  ]},
+  valorant:{name:'Valorant', short:'VAL', unit:'VP', g1:'#FF8FA8', g2:'#E8506E', fields:[
+    {k:'riotId', l:'Riot ID', ph:'Nama#1234'}
+  ]},
+  roblox:{name:'Roblox', short:'RBX', unit:'Robux', g1:'#8FD9C4', g2:'#4FB9A0', fields:[
+    {k:'username', l:'Username Roblox', ph:'nama_akun'}
+  ]},
+  steam:{name:'Steam Wallet', short:'STM', unit:'Saldo', g1:'#A8C8F0', g2:'#6F93D9', fields:[
+    {k:'email', l:'Email akun Steam', ph:'nama@email.com'}
+  ]},
+  gplay:{name:'Google Play', short:'GP', unit:'Voucher', g1:'#A7E8C4', g2:'#4FBE8C', fields:[
+    {k:'email', l:'Email Google Play', ph:'nama@email.com'}
+  ]}
+};
+
+var DEFAULT_PRODUCTS = [
+  {id:'ml1',g:'ml',n:'5 Diamonds',p:1500},
+  {id:'ml2',g:'ml',n:'12 Diamonds',p:3000},
+  {id:'ml3',g:'ml',n:'22 Diamonds',p:5500,b:'+2 bonus'},
+  {id:'ml4',g:'ml',n:'56 Diamonds',p:13500,b:'+6 bonus'},
+  {id:'ml5',g:'ml',n:'86 Diamonds',p:20000,b:'+10 bonus',hot:true},
+  {id:'ml6',g:'ml',n:'172 Diamonds',p:40000,b:'+20 bonus'},
+  {id:'ml7',g:'ml',n:'257 Diamonds',p:60000,b:'+32 bonus'},
+  {id:'ml8',g:'ml',n:'Weekly Diamond Pass',p:28000},
+
+  {id:'ff1',g:'ff',n:'5 Diamond',p:1000},
+  {id:'ff2',g:'ff',n:'12 Diamond',p:2500},
+  {id:'ff3',g:'ff',n:'20 Diamond',p:4000},
+  {id:'ff4',g:'ff',n:'70 Diamond',p:13000,b:'+7 bonus',hot:true},
+  {id:'ff5',g:'ff',n:'140 Diamond',p:26000,b:'+14 bonus'},
+  {id:'ff6',g:'ff',n:'355 Diamond',p:65000,b:'+35 bonus'},
+  {id:'ff7',g:'ff',n:'Member Mingguan',p:27000},
+
+  {id:'pb1',g:'pubgm',n:'60 UC',p:15000},
+  {id:'pb2',g:'pubgm',n:'325 UC',p:75000,b:'+25 bonus',hot:true},
+  {id:'pb3',g:'pubgm',n:'660 UC',p:150000,b:'+60 bonus'},
+  {id:'pb4',g:'pubgm',n:'1800 UC',p:390000,b:'+300 bonus'},
+  {id:'pb5',g:'pubgm',n:'Royal Pass Lite',p:60000},
+
+  {id:'gi1',g:'genshin',n:'60 Genesis Crystal',p:16000},
+  {id:'gi2',g:'genshin',n:'330 Genesis Crystal',p:79000,b:'+30 bonus',hot:true},
+  {id:'gi3',g:'genshin',n:'1090 Genesis Crystal',p:249000,b:'+110 bonus'},
+  {id:'gi4',g:'genshin',n:'Welkin Moon 30 Hari',p:75000},
+
+  {id:'hs1',g:'hsr',n:'60 Oneiric Shard',p:16000},
+  {id:'hs2',g:'hsr',n:'330 Oneiric Shard',p:79000,b:'+30 bonus',hot:true},
+  {id:'hs3',g:'hsr',n:'1090 Oneiric Shard',p:249000,b:'+110 bonus'},
+  {id:'hs4',g:'hsr',n:'Express Supply Pass',p:75000},
+
+  {id:'va1',g:'valorant',n:'420 VP',p:59000},
+  {id:'va2',g:'valorant',n:'700 VP',p:95000,b:'+50 bonus',hot:true},
+  {id:'va3',g:'valorant',n:'1750 VP',p:229000,b:'+150 bonus'},
+
+  {id:'rb1',g:'roblox',n:'80 Robux',p:16000},
+  {id:'rb2',g:'roblox',n:'400 Robux',p:75000,hot:true},
+  {id:'rb3',g:'roblox',n:'800 Robux',p:148000},
+
+  {id:'st1',g:'steam',n:'Saldo Rp60.000',p:65000},
+  {id:'st2',g:'steam',n:'Saldo Rp120.000',p:128000,hot:true},
+  {id:'st3',g:'steam',n:'Saldo Rp250.000',p:262000},
+
+  {id:'gp1',g:'gplay',n:'Voucher Rp20.000',p:21500},
+  {id:'gp2',g:'gplay',n:'Voucher Rp50.000',p:52500,hot:true},
+  {id:'gp3',g:'gplay',n:'Voucher Rp100.000',p:104000}
+];
+
+var PAYMENTS = [
+  {id:'qris', l:'QRIS', d:'Semua e-wallet & m-banking', fee:0, c1:'#FF7EB3', c2:'#EC3E86',
+   ic:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/>'},
+  {id:'ewallet', l:'E-Wallet', d:'OVO, DANA, ShopeePay, GoPay', fee:1000, c1:'#C9A7F5', c2:'#8E7BE8',
+   ic:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><circle cx="17" cy="14.5" r="1.3"/>'},
+  {id:'va', l:'Virtual Account', d:'BCA, BRI, Mandiri, BNI', fee:2500, c1:'#8FD9C4', c2:'#4FB9A0',
+   ic:'<path d="M3 10l9-6 9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 20h18"/>'}
+];
+
+/* ================= STATE ================= */
+var S = {
+  products: [],
+  orders: [],
+  role: 'cust',
+  view: 'home',
+  gameKey: null,
+  pickedId: null,
+  payId: 'qris',
+  search: ''
+};
+
+/* ================= HELPERS ================= */
+function rp(n){ return 'Rp' + Math.round(n).toLocaleString('id-ID'); }
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function code(){
+  var d = new Date();
+  var ymd = d.toISOString().slice(2,10).replace(/-/g,'');
+  return 'BLB-' + ymd + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
+}
+function tstamp(ts){
+  if(!ts) return '';
+  return new Date(ts).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+function toast(msg, kind){
+  var box = document.getElementById('toasts');
+  var el = document.createElement('div');
+  el.className = 'toast ' + (kind||'');
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(function(){ el.remove(); }, 3200);
+}
+function thumb(g, cls){
+  return '<div class="game-thumb'+(cls?' '+cls:'')+'" style="background:linear-gradient(140deg,'+g.g1+','+g.g2+')">'+g.short+'</div>';
+}
+
+/* ================= STORAGE ================= */
+function put(key, val){
+  return window.storage.set(key, JSON.stringify(val), true).catch(function(e){
+    console.error('storage.set', key, e);
+    toast('Gagal menyimpan data.', 'bad');
+  });
+}
+function grab(key){
+  return window.storage.get(key, true).then(function(r){ return JSON.parse(r.value); });
+}
+function saveProducts(){ return put('products', S.products); }
+function saveOrders(){ return put('orders', S.orders); }
+
+function loadAll(){
+  var pj = grab('products').then(function(v){ S.products = v; }).catch(function(){
+    S.products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+    return put('products', S.products);
+  });
+  var oj = grab('orders').then(function(v){ S.orders = v; }).catch(function(){
+    S.orders = [];
+    return put('orders', S.orders);
+  });
+  return Promise.all([pj, oj]);
+}
+function resetDemo(){
+  if(!confirm('Reset semua produk dan pesanan ke kondisi awal?')) return;
+  S.products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+  S.orders = [];
+  Promise.all([saveProducts(), saveOrders()]).then(function(){
+    renderGames();
+    if(S.view === 'adm') renderAdmin();
+    toast('Data demo direset.', 'ok');
+  });
+}
+
+/* ================= NAV ================= */
+function toggleNav(){ document.getElementById('mnav').classList.toggle('open'); }
+function setRole(r){
+  S.role = r;
+  document.getElementById('rbCust').classList.toggle('active', r==='cust');
+  document.getElementById('rbAdm').classList.toggle('active', r==='adm');
+  go(r === 'adm' ? 'adm' : 'home');
+}
+function go(view, key){
+  S.view = view;
+  if(key) S.gameKey = key;
+  document.getElementById('vHome').hidden  = view !== 'home';
+  document.getElementById('vGame').hidden  = view !== 'game';
+  document.getElementById('vLacak').hidden = view !== 'lacak';
+  document.getElementById('vAdm').hidden   = view !== 'adm';
+
+  var isAdm = view === 'adm';
+  S.role = isAdm ? 'adm' : 'cust';
+  document.getElementById('rbCust').classList.toggle('active', !isAdm);
+  document.getElementById('rbAdm').classList.toggle('active', isAdm);
+
+  var links = document.querySelectorAll('#nav a');
+  for(var i=0;i<links.length;i++){
+    links[i].classList.toggle('active', links[i].getAttribute('data-v') === view);
+  }
+  if(view === 'game') renderGamePage();
+  if(view === 'adm') renderAdmin();
+  document.getElementById('mnav').classList.remove('open');
+  window.scrollTo(0,0);
+}
+
+/* ================= HOME ================= */
+function renderGames(){
+  var grid = document.getElementById('gameGrid');
+  var term = S.search.trim().toLowerCase();
+  var keys = Object.keys(GAMES).filter(function(k){
+    var count = S.products.filter(function(p){ return p.g === k && p.active !== false; }).length;
+    if(count === 0) return false;
+    if(term && GAMES[k].name.toLowerCase().indexOf(term) === -1 && GAMES[k].short.toLowerCase().indexOf(term) === -1) return false;
+    return true;
+  });
+  if(keys.length === 0){
+    grid.innerHTML = '<div class="blank" style="grid-column:1/-1;">Game tidak ditemukan.</div>';
+    return;
+  }
+  grid.innerHTML = keys.map(function(k){
+    var g = GAMES[k];
+    var n = S.products.filter(function(p){ return p.g === k && p.active !== false; }).length;
+    return '<button class="game-card" onclick="openGame(\''+k+'\')">'+
+      thumb(g)+
+      '<div><div class="gname">'+esc(g.name)+'</div>'+
+      '<div class="gmeta">'+n+' pilihan '+esc(g.unit)+'</div></div>'+
+    '</button>';
+  }).join('');
+}
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'gameSearch'){
+    S.search = e.target.value;
+    renderGames();
+  }
+});
+function openGame(key){
+  S.gameKey = key;
+  S.pickedId = null;
+  S.payId = 'qris';
+  go('game', key);
+}
+
+/* ================= GAME PAGE ================= */
+function renderGamePage(){
+  var g = GAMES[S.gameKey];
+  if(!g) { go('home'); return; }
+  var list = S.products.filter(function(p){ return p.g === S.gameKey && p.active !== false; });
+
+  var nominals = list.map(function(p){
+    var on = p.id === S.pickedId ? ' on' : '';
+    return '<button class="nominal'+on+'" onclick="pick(\''+p.id+'\')">'+
+      (p.hot ? '<span class="hot">Terlaris</span>' : '')+
+      '<div class="nm">'+esc(p.n)+'</div>'+
+      (p.b ? '<div class="bn">'+esc(p.b)+'</div>' : '')+
+      '<div class="pr">'+rp(p.p)+'</div>'+
+    '</button>';
+  }).join('');
+
+  var fields = g.fields.map(function(f){
+    var val = '';
+    var prev = document.getElementById('f_'+f.k);
+    if(prev) val = prev.value;
+    if(f.opt){
+      return '<div class="field" data-k="'+f.k+'"><label>'+f.l+'</label><select id="f_'+f.k+'">'+
+        f.opt.map(function(o){ return '<option'+(o===val?' selected':'')+'>'+esc(o)+'</option>'; }).join('')+
+        '</select><div class="err-msg">Wajib diisi</div></div>';
+    }
+    return '<div class="field" data-k="'+f.k+'"><label>'+f.l+'</label>'+
+      '<input type="text" id="f_'+f.k+'" value="'+esc(val)+'" placeholder="'+f.ph+'">'+
+      '<div class="err-msg">Wajib diisi</div></div>';
+  }).join('');
+
+  var pays = PAYMENTS.map(function(pm){
+    var on = pm.id === S.payId ? ' on' : '';
+    return '<div class="pay'+on+'" onclick="setPay(\''+pm.id+'\')">'+
+      '<div style="display:flex;align-items:center;gap:12px;">'+
+        '<div class="pi" style="background:linear-gradient(140deg,'+pm.c1+','+pm.c2+')"><svg class="icon" viewBox="0 0 24 24">'+pm.ic+'</svg></div>'+
+        '<div><div class="pn">'+pm.l+'</div><div class="pd">'+pm.d+'</div></div>'+
+      '</div>'+
+      '<div class="pf">'+(pm.fee ? '+'+rp(pm.fee) : 'Gratis')+'</div>'+
+    '</div>';
+  }).join('');
+
+  document.getElementById('gameDetail').innerHTML =
+    '<div class="detail-hero">'+thumb(g)+
+      '<div><h2>'+esc(g.name)+'</h2><div class="dh-sub">Isi ID kamu, pilih nominal, langsung bayar.</div></div>'+
+    '</div>'+
+    '<div class="detail-layout">'+
+      '<div>'+
+        '<div class="panel"><div class="panel-head"><span class="step-chip">1</span><h3>Masukkan data akun</h3></div>'+
+          fields +
+          '<div class="hint">Pastikan ID sudah benar, item dikirim langsung ke akun ini.</div>'+
+        '</div>'+
+        '<div class="panel"><div class="panel-head"><span class="step-chip">2</span><h3>Pilih nominal</h3></div>'+
+          '<div class="nominal-grid">'+nominals+'</div>'+
+        '</div>'+
+        '<div class="panel"><div class="panel-head"><span class="step-chip">3</span><h3>Metode pembayaran</h3></div>'+
+          '<div class="pay-list">'+pays+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<aside><div class="summary" id="sumBox"></div></aside>'+
+    '</div>';
+  renderSummary();
+}
+function pick(id){
+  S.pickedId = id;
+  var btns = document.querySelectorAll('.nominal');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
+  var all = S.products.filter(function(p){ return p.g === S.gameKey && p.active !== false; });
+  var idx = all.findIndex(function(p){ return p.id === id; });
+  if(idx > -1 && btns[idx]) btns[idx].classList.add('on');
+  renderSummary();
+}
+function setPay(id){
+  S.payId = id;
+  var els = document.querySelectorAll('.pay');
+  for(var i=0;i<els.length;i++) els[i].classList.remove('on');
+  var idx = PAYMENTS.findIndex(function(p){ return p.id === id; });
+  if(idx > -1 && els[idx]) els[idx].classList.add('on');
+  renderSummary();
+}
+function renderSummary(){
+  var box = document.getElementById('sumBox');
+  if(!box) return;
+  var g = GAMES[S.gameKey];
+  var p = S.products.find(function(x){ return x.id === S.pickedId; });
+  var pm = PAYMENTS.find(function(x){ return x.id === S.payId; });
+
+  if(!p){
+    box.innerHTML = '<h3>Ringkasan</h3>'+
+      '<div class="empty-hint">Pilih nominal dulu ya biar totalnya muncul.</div>'+
+      '<button class="btn btn-primary btn-block" style="margin-top:14px;" disabled>Bayar sekarang</button>';
+    return;
+  }
+  var total = p.p + pm.fee;
+  box.innerHTML = '<h3>Ringkasan</h3>'+
+    '<div class="sum-row"><span>Game</span><span class="v">'+esc(g.name)+'</span></div>'+
+    '<div class="sum-row"><span>Nominal</span><span class="v">'+esc(p.n)+'</span></div>'+
+    (p.b ? '<div class="sum-row"><span>Bonus</span><span class="v" style="color:var(--green)">'+esc(p.b)+'</span></div>' : '')+
+    '<div class="sum-div"></div>'+
+    '<div class="sum-row"><span>Harga</span><span class="v">'+rp(p.p)+'</span></div>'+
+    '<div class="sum-row"><span>Biaya '+pm.l+'</span><span class="v">'+(pm.fee ? rp(pm.fee) : 'Gratis')+'</span></div>'+
+    '<div class="sum-total"><span>Total</span><b>'+rp(total)+'</b></div>'+
+    '<button class="btn btn-primary btn-block" onclick="buy()">Bayar sekarang</button>';
+}
+
+/* ================= CHECKOUT ================= */
+function buy(){
+  var g = GAMES[S.gameKey];
+  var p = S.products.find(function(x){ return x.id === S.pickedId; });
+  var pm = PAYMENTS.find(function(x){ return x.id === S.payId; });
+  if(!p) return;
+
+  var data = {}, ok = true, firstBad = null;
+  g.fields.forEach(function(f){
+    var el = document.getElementById('f_'+f.k);
+    var grp = el.closest('.field');
+    var v = el.value.trim();
+    if(!v){
+      ok = false;
+      grp.classList.add('bad');
+      if(!firstBad) firstBad = el;
+    } else {
+      grp.classList.remove('bad');
+      data[f.l] = v;
+    }
+  });
+  if(!ok){
+    toast('Lengkapi dulu data akunnya ya.', 'bad');
+    if(firstBad){ firstBad.scrollIntoView({behavior:'smooth', block:'center'}); firstBad.focus(); }
+    return;
+  }
+
+  var o = {
+    code: code(),
+    pid: p.id,
+    pname: p.n,
+    game: S.gameKey,
+    gname: g.name,
+    fields: data,
+    pay: pm.l,
+    price: p.p,
+    fee: pm.fee,
+    total: p.p + pm.fee,
+    status: 'Menunggu Pembayaran',
+    at: Date.now(),
+    paidAt: null,
+    doneAt: null
+  };
+  S.orders.unshift(o);
+  saveOrders();
+  showOk(o);
+
+  setTimeout(function(){
+    var cur = S.orders.find(function(x){ return x.code === o.code; });
+    if(cur && cur.status === 'Menunggu Pembayaran'){
+      cur.status = 'Diproses';
+      cur.paidAt = Date.now();
+      saveOrders();
+      var st = document.getElementById('okStatus');
+      if(st) st.innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--green);stroke-width:3;"><path d="M20 6L9 17l-5-5"/></svg> Pembayaran diterima, pesanan diproses';
+      if(S.view === 'adm') renderAdmin();
+    }
+  }, 2600);
+}
+function showOk(o){
+  document.getElementById('okBody').innerHTML =
+    '<div class="ok-circle"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+    '<div style="font-size:14px;color:var(--plum-soft);font-weight:600;">Pesanan dibuat</div>'+
+    '<div class="ok-code">'+o.code+'</div>'+
+    '<div class="copy-chip" onclick="copyCode(\''+o.code+'\')"><svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;"><rect x="9" y="9" width="11" height="11" rx="2"/><rect x="4" y="4" width="11" height="11" rx="2"/></svg>Salin kode</div>'+
+    '<div class="ok-status" id="okStatus"><span class="spin"></span> Menunggu pembayaran...</div>'+
+    '<div class="ok-meta">'+esc(o.pname)+' &middot; '+rp(o.total)+' via '+o.pay+'</div>'+
+    '<button class="btn btn-primary btn-block" onclick="trackFrom(\''+o.code+'\')">Lihat status</button>'+
+    '<button class="btn btn-ghost btn-block" style="margin-top:9px;" onclick="closeOk()">Top up lagi</button>';
+  document.getElementById('okOverlay').hidden = false;
+}
+function closeOk(){
+  document.getElementById('okOverlay').hidden = true;
+  S.pickedId = null;
+  if(S.view === 'game') renderGamePage();
+}
+function copyCode(c){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(c).then(function(){ toast('Kode disalin.', 'ok'); }).catch(function(){ toast('Kode: '+c); });
+  } else { toast('Kode: '+c); }
+}
+function trackFrom(c){
+  document.getElementById('okOverlay').hidden = true;
+  S.pickedId = null;
+  go('lacak');
+  document.getElementById('codeIn').value = c;
+  findOrder();
+}
+
+/* ================= LACAK ================= */
+function findOrder(){
+  var c = document.getElementById('codeIn').value.trim().toUpperCase();
+  var out = document.getElementById('lacakOut');
+  if(!c){ out.innerHTML = '<div class="blank">Masukkan kode pesanan dulu ya.</div>'; return; }
+  var o = S.orders.find(function(x){ return x.code.toUpperCase() === c; });
+  if(!o){ out.innerHTML = '<div class="blank">Kode "'+esc(c)+'" tidak ditemukan.</div>'; return; }
+
+  if(o.status === 'Gagal'){
+    out.innerHTML = '<div class="order-card">'+
+      '<div class="oc-head"><span class="oc-code">'+o.code+'</span><span class="pill fail">Gagal</span></div>'+
+      '<p style="font-size:13.5px;color:var(--plum-soft);">Pesanan gagal diproses, kemungkinan data akun tidak sesuai. Hubungi cs@blubystore.id dengan kode ini untuk pengecekan dan pengembalian dana.</p>'+
+    '</div>';
+    return;
+  }
+
+  var steps = [
+    {l:'Pesanan dibuat', t:o.at, d:true},
+    {l:'Pembayaran diterima', t:o.paidAt, d:!!o.paidAt},
+    {l:'Sedang diproses', t:o.paidAt, d:!!o.paidAt},
+    {l:'Selesai', t:o.doneAt, d:!!o.doneAt}
+  ];
+  var nowSet = false;
+  var tl = steps.map(function(s){
+    var cls = s.d ? 'done' : '';
+    if(!s.d && !nowSet){ cls = 'now'; nowSet = true; }
+    return '<div class="tl-step '+cls+'"><div class="tl-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+      '<div><div class="tl-label">'+s.l+'</div><div class="tl-time">'+(s.t ? tstamp(s.t) : 'Menunggu')+'</div></div></div>';
+  }).join('');
+
+  var pc = o.status === 'Selesai' ? 'done' : o.status === 'Diproses' ? 'proc' : 'wait';
+  var tgt = Object.keys(o.fields).map(function(k){ return k+': '+o.fields[k]; }).join(' &middot; ');
+
+  out.innerHTML = '<div class="order-card">'+
+    '<div class="oc-head"><span class="oc-code">'+o.code+'</span><span class="pill '+pc+'">'+o.status+'</span></div>'+
+    '<div style="font-size:14.5px;font-weight:700;">'+esc(o.pname)+'</div>'+
+    '<div style="font-size:13px;color:var(--plum-soft);margin-top:2px;">'+esc(o.gname)+' &middot; '+esc(tgt)+'</div>'+
+    '<div style="font-size:13px;color:var(--plum-mute);margin-top:4px;">'+rp(o.total)+' via '+o.pay+'</div>'+
+    '<div class="tl">'+tl+'</div>'+
+  '</div>';
+}
+
+/* ================= ADMIN ================= */
+function renderAdmin(){
+  var today = new Date().toDateString();
+  var td = S.orders.filter(function(o){ return new Date(o.at).toDateString() === today; });
+  var rev = td.filter(function(o){ return o.status !== 'Gagal'; }).reduce(function(a,o){ return a+o.total; },0);
+  var pend = S.orders.filter(function(o){ return o.status === 'Menunggu Pembayaran' || o.status === 'Diproses'; }).length;
+  var act = S.products.filter(function(p){ return p.active !== false; }).length;
+
+  document.getElementById('statGrid').innerHTML = [
+    ['Pesanan hari ini', td.length],
+    ['Pendapatan hari ini', rp(rev)],
+    ['Menunggu diproses', pend],
+    ['Produk aktif', act]
+  ].map(function(s){
+    return '<div class="stat"><div class="sl">'+s[0]+'</div><div class="sv">'+s[1]+'</div></div>';
+  }).join('');
+
+  var ob = document.getElementById('ordBody');
+  if(S.orders.length === 0){
+    ob.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--plum-mute);padding:26px;">Belum ada pesanan.</td></tr>';
+  } else {
+    ob.innerHTML = S.orders.map(function(o){
+      var tgt = Object.keys(o.fields).map(function(k){ return o.fields[k]; }).join(' / ');
+      return '<tr>'+
+        '<td class="bold">'+o.code+'</td>'+
+        '<td>'+esc(o.pname)+'<br><span style="color:var(--plum-mute);font-size:11px;">'+esc(o.gname)+'</span></td>'+
+        '<td>'+esc(tgt)+'</td>'+
+        '<td>'+o.pay+'</td>'+
+        '<td class="bold">'+rp(o.total)+'</td>'+
+        '<td><select class="sel-status" onchange="setStatus(\''+o.code+'\', this.value)">'+
+          ['Menunggu Pembayaran','Diproses','Selesai','Gagal'].map(function(s){
+            return '<option'+(s===o.status?' selected':'')+'>'+s+'</option>';
+          }).join('')+'</select></td>'+
+        '<td>'+tstamp(o.at)+'</td>'+
+      '</tr>';
+    }).join('');
+  }
+
+  var cnt = {};
+  S.orders.forEach(function(o){ if(o.status !== 'Gagal') cnt[o.pid] = (cnt[o.pid]||0)+1; });
+  var top = Object.keys(cnt).map(function(id){
+    var p = S.products.find(function(x){ return x.id === id; });
+    return {n: p ? p.n : id, c: cnt[id]};
+  }).sort(function(a,b){ return b.c - a.c; }).slice(0,5);
+
+  var tp = document.getElementById('topProd');
+  if(top.length === 0){
+    tp.innerHTML = '<div class="blank">Belum ada data penjualan.</div>';
+  } else {
+    var max = top[0].c;
+    tp.innerHTML = top.map(function(t){
+      var w = Math.max(9, Math.round(t.c/max*100));
+      return '<div class="bar-row"><span>'+esc(t.n)+'</span><div class="bar-tr"><div class="bar-fl" style="width:'+w+'%"></div></div><span style="font-weight:700;">'+t.c+'x</span></div>';
+    }).join('');
+  }
+
+  document.getElementById('prodBody').innerHTML = S.products.map(function(p){
+    return '<tr>'+
+      '<td class="bold">'+esc(p.n)+(p.b ? ' <span style="color:var(--green);font-size:11px;font-weight:700;">'+esc(p.b)+'</span>' : '')+'</td>'+
+      '<td>'+esc(GAMES[p.g].name)+'</td>'+
+      '<td><input class="price-in" type="number" value="'+p.p+'" onchange="setPrice(\''+p.id+'\', this.value)"></td>'+
+      '<td><label class="sw"><input type="checkbox"'+(p.active !== false ? ' checked' : '')+' onchange="setActive(\''+p.id+'\', this.checked)"><span class="sl-track"></span></label></td>'+
+    '</tr>';
+  }).join('');
+}
+function setStatus(c, st){
+  var o = S.orders.find(function(x){ return x.code === c; });
+  if(!o) return;
+  o.status = st;
+  if(st === 'Selesai' && !o.doneAt) o.doneAt = Date.now();
+  if(st === 'Diproses' && !o.paidAt) o.paidAt = Date.now();
+  saveOrders().then(function(){ renderAdmin(); });
+  toast('Status '+c+' → '+st, 'ok');
+}
+function setPrice(id, v){
+  var p = S.products.find(function(x){ return x.id === id; });
+  if(!p) return;
+  var n = parseInt(v, 10);
+  if(isNaN(n) || n < 0){ toast('Harga tidak valid.', 'bad'); renderAdmin(); return; }
+  p.p = n;
+  saveProducts().then(function(){ toast('Harga "'+p.n+'" diperbarui.', 'ok'); });
+}
+function setActive(id, on){
+  var p = S.products.find(function(x){ return x.id === id; });
+  if(!p) return;
+  p.active = on;
+  saveProducts().then(function(){
+    renderGames();
+    renderAdmin();
+    toast((on ? 'Menampilkan ' : 'Menyembunyikan ') + '"'+p.n+'"', 'ok');
+  });
+}
+
+/* ================= INIT ================= */
+function init(){
+  document.getElementById('gameGrid').innerHTML = '<div class="loading" style="grid-column:1/-1;">Memuat daftar game...</div>';
+  loadAll().then(function(){
+    renderGames();
+  }).catch(function(e){
+    console.error(e);
+    S.products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+    S.orders = [];
+    renderGames();
+    toast('Penyimpanan tidak tersedia, memakai data contoh.', 'bad');
+  });
+}
+
+window.go = go;
+window.setRole = setRole;
+window.toggleNav = toggleNav;
+window.openGame = openGame;
+window.pick = pick;
+window.setPay = setPay;
+window.buy = buy;
+window.closeOk = closeOk;
+window.copyCode = copyCode;
+window.trackFrom = trackFrom;
+window.findOrder = findOrder;
+window.setStatus = setStatus;
+window.setPrice = setPrice;
+window.setActive = setActive;
+window.resetDemo = resetDemo;
+
+init();
+})();
+</script>
+</body>
+</html>
